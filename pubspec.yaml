@@ -39,6 +39,10 @@ dependencies:
   provider: ^6.0.5
   shared_preferences: ^2.2.0
   badges: ^3.1.1
+  carousel_slider: ^4.2.1
+  dotted_border: ^2.1.0
+  file_picker: ^6.0.0
+  cloudinary_public: ^0.21.0
 
 dev_dependencies:
   flutter_test:
@@ -63,8 +67,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/images/
+    - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

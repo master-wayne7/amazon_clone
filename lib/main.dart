@@ -1,5 +1,6 @@
 import 'package:amazno_clone/common/widgets/bottom_bar.dart';
 import 'package:amazno_clone/constants/global_variables.dart';
+import 'package:amazno_clone/features/admin/screens/admin_screen.dart';
 import 'package:amazno_clone/features/auth/screens/auth_screen.dart';
 import 'package:amazno_clone/features/auth/services/auth_service.dart';
 import 'package:amazno_clone/providers/user_provider.dart';
@@ -32,7 +33,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     authService.getUserData(context);
   }
@@ -44,11 +44,11 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Amazon Clone',
       theme: ThemeData(
-        colorScheme: ColorScheme.light(
+        colorScheme: const ColorScheme.light(
           primary: GlobalVariables.secondaryColor,
         ),
         scaffoldBackgroundColor: GlobalVariables.backgroundColor,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           elevation: 0,
           iconTheme: IconThemeData(
             color: Colors.black,
@@ -57,7 +57,9 @@ class _MyAppState extends State<MyApp> {
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
       home: Provider.of<UserProvider>(context).user.token.isNotEmpty
-          ? const BottomBar()
+          ? Provider.of<UserProvider>(context).user.type == "user"
+              ? const BottomBar()
+              : const AdminScreen()
           : const AuthScreen(),
     );
   }
