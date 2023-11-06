@@ -1,14 +1,18 @@
 import 'dart:convert';
 
+import 'package:amazno_clone/models/rating.dart';
+import 'package:flutter/material.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class Product {
   final String name;
   final String description;
-  final double quantity;
+  final int quantity;
   final String category;
   final double price;
   final List<String> images;
   final String? id;
+  final List<Rating>? ratings;
   Product({
     required this.name,
     required this.description,
@@ -17,6 +21,7 @@ class Product {
     required this.price,
     required this.images,
     this.id,
+    this.ratings,
   });
 
   Map<String, dynamic> toMap() {
@@ -28,18 +33,27 @@ class Product {
       'price': price,
       'images': images,
       'id': id,
+      'ratings': ratings,
     };
   }
 
   factory Product.fromMap(Map<String, dynamic> map) {
+    debugPrint("Here------------");
     return Product(
-      name: map['name'] as String,
-      description: map['description'] as String,
-      quantity: double.parse(map['quantity'].toString()),
-      category: map['category'] as String,
+      name: map['name'],
+      description: map['description'],
+      quantity: map['quantity'],
+      category: map['category'],
       price: double.parse(map['price'].toString()),
       images: List<String>.from(map['images']),
-      id: map['_id'] as String,
+      id: map['_id'],
+      ratings: map['ratings'] != null
+          ? List<Rating>.from(
+              map['ratings']?.map<Rating>(
+                (x) => Rating.fromMap(x),
+              ),
+            )
+          : null,
     );
   }
 

@@ -1,26 +1,28 @@
+import 'package:amazno_clone/common/widgets/custom_button.dart';
 import 'package:amazno_clone/constants/global_variables.dart';
+import 'package:amazno_clone/features/cart/widgets/cart_product.dart';
+import 'package:amazno_clone/features/cart/widgets/cart_subtotals.dart';
 import 'package:amazno_clone/features/home/widgets/address_widget.dart';
-import 'package:amazno_clone/features/home/widgets/carousel_image.dart';
-import 'package:amazno_clone/features/home/widgets/deal_of_the_day.dart';
-import 'package:amazno_clone/features/home/widgets/top_categories.dart';
 import 'package:amazno_clone/features/search/screen/search_screen.dart';
+import 'package:amazno_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const String routeName = '/home';
-  const HomeScreen({super.key});
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CartScreen> createState() => _CartScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CartScreenState extends State<CartScreen> {
   void naviagteToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScreen.routeName, arguments: query);
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().user;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -93,15 +95,34 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            AddressBox(),
-            SizedBox(height: 10),
-            TopCategories(),
-            SizedBox(height: 10),
-            CarouselImage(),
-            DealOfTheDay(),
+            const AddressBox(),
+            const CartSubtotal(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomButton(
+                text: "Proceed to Buy (${user.cart.length}) items",
+                onTap: () {},
+                color: Colors.yellow[600],
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              color: Colors.black12.withOpacity(0.08),
+              height: 1,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: user.cart.length,
+              itemBuilder: (context, index) => CartProduct(index: index),
+            )
           ],
         ),
       ),

@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 //Import from files
 const authRouter = require("./routes/auth");
 const adminRouter = require("./routes/admin");
+const productRouter = require("./routes/products");
+const userRouter = require("./routes/user");
 
 // Initializations
 const PORT = 3000;
@@ -15,6 +17,8 @@ const DB = "mongodb+srv://ronitrameja:amazonclone@cluster0.mfhykti.mongodb.net/?
 app.use(express.json());
 app.use(authRouter);
 app.use(adminRouter);
+app.use(productRouter);
+app.use(userRouter);
 
 // Connections
 mongoose
@@ -26,6 +30,6 @@ mongoose
     console.log(e);
   });
 
-app.listen(PORT, "192.168.0.107", ()=>{
+app.listen(PORT, "192.168.0.109", ()=>{
     console.log(`Server running on port ${PORT}`);
 });
