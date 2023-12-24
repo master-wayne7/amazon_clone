@@ -1,11 +1,16 @@
 import 'package:amazno_clone/constants/global_variables.dart';
 import 'package:amazno_clone/features/home/screens/category_deals_screen.dart';
+import 'package:amazno_clone/providers/home_screen_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TopCategories extends StatelessWidget {
   const TopCategories({super.key});
 
   void navigateToCategoryPage(BuildContext context, String category) {
+    final homeScreenProvider =
+        Provider.of<HomeScreenProvider>(context, listen: false);
+    homeScreenProvider.init(context, category);
     Navigator.pushNamed(context, CategoryDealsScreen.routeName,
         arguments: category);
   }

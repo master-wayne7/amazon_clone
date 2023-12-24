@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:amazno_clone/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 
 class SingleProduct extends StatelessWidget {
@@ -22,12 +22,15 @@ class SingleProduct extends StatelessWidget {
           color: Colors.white,
         ),
         child: Container(
-          width: 180,
+          width: width * 0.4,
           padding: EdgeInsets.all(10),
-          child: Image.network(
-            image,
-            fit: BoxFit.fitHeight,
-            width: 180,
+          child: Hero(
+            tag: image,
+            child: Image.network(
+              image,
+              fit: BoxFit.fitHeight,
+              width: width * 0.4,
+            ),
           ),
         ),
       ),

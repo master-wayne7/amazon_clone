@@ -50,7 +50,11 @@ class HomeService {
         quantity: 0,
         category: "",
         price: 0,
-        images: []);
+        images: [],
+        sellerName: "",
+        unitsSold: 0,
+        discountedPrice: 0,
+        discount: 0);
     try {
       http.Response res = await http.get(
         Uri.parse("$uri/api/deal-of-the-day"),
@@ -64,6 +68,43 @@ class HomeService {
         context: context,
         onSuccess: () {
           product = Product.fromJson(res.body);
+        },
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+      showSnackBar(context, e.toString());
+    }
+    return product;
+  }
+
+  Future<Product> getProduct(
+      {required BuildContext context, required String id}) async {
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    Product product = Product(
+        name: "",
+        description: "",
+        quantity: 0,
+        category: "",
+        price: 0,
+        images: [],
+        sellerName: "",
+        unitsSold: 0,
+        discountedPrice: 0,
+        discount: 0);
+    try {
+      http.Response res = await http.get(
+        Uri.parse("$uri/api/get-product?id=$id"),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+          'x-auth-token': user.token,
+        },
+      );
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          debugPrint(res.body);
+          product = Product.fromMap(jsonDecode(res.body));
         },
       );
     } catch (e) {

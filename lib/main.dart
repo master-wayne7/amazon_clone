@@ -1,19 +1,41 @@
-import 'package:amazno_clone/common/widgets/bottom_bar.dart';
 import 'package:amazno_clone/constants/global_variables.dart';
-import 'package:amazno_clone/features/admin/screens/admin_screen.dart';
-import 'package:amazno_clone/features/auth/screens/auth_screen.dart';
-import 'package:amazno_clone/features/auth/services/auth_service.dart';
+import 'package:amazno_clone/features/splash/screen/splash_screen.dart';
+import 'package:amazno_clone/firebase_options.dart';
+import 'package:amazno_clone/providers/accounts_provider.dart';
+import 'package:amazno_clone/providers/home_screen_provider.dart';
+import 'package:amazno_clone/providers/payment_provider.dart';
+import 'package:amazno_clone/providers/product_provider.dart';
 import 'package:amazno_clone/providers/user_provider.dart';
 import 'package:amazno_clone/router.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  CachedNetworkImage.logLevel = CacheManagerLogLevel.debug;
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HomeScreenProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PaymentProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AccountsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(),
         ),
       ],
       child: const MyApp(),
@@ -21,21 +43,8 @@ void main() {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final AuthService authService = AuthService();
-
-  @override
-  void initState() {
-    super.initState();
-    authService.getUserData(context);
-  }
 
   // This widget is the root of your application.
   @override
@@ -44,6 +53,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Amazon Clone',
       theme: ThemeData(
+        useMaterial3: false,
         colorScheme: const ColorScheme.light(
           primary: GlobalVariables.secondaryColor,
         ),
@@ -56,11 +66,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: Provider.of<UserProvider>(context).user.token.isNotEmpty
-          ? Provider.of<UserProvider>(context).user.type == "user"
-              ? const BottomBar()
-              : const AdminScreen()
-          : const AuthScreen(),
+      home: const SplashScreen(),
     );
   }
 }

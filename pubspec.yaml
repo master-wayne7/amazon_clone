@@ -2,7 +2,7 @@ name: amazno_clone
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.6 <4.0.0'
+  sdk: ">=3.0.6 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -44,6 +43,22 @@ dependencies:
   file_picker: ^6.0.0
   cloudinary_public: ^0.21.0
   flutter_rating_bar: ^4.0.1
+  upi_india: ^3.0.1
+  path_provider: ^2.1.1
+  pdf: ^3.10.6
+  intl: ^0.18.1
+  fl_chart: ^0.64.0
+  lottie: ^2.7.0
+  flutter_native_splash: ^2.3.5
+  geolocator: ^10.1.0
+  cached_network_image: ^3.3.0
+  share_plus: ^7.2.1
+  uni_links: ^0.5.1
+  firebase_dynamic_links: ^5.4.4
+  firebase_core: ^2.22.0
+  firebase_analytics: ^10.7.0
+  shimmer: ^3.0.0
+  svg_flutter: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -58,10 +73,15 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_native_splash:
+  image: assets/images/amazon_in.png
+  color: "#ffffff"
+  android_12:
+    image: assets/images/amazon_in.png
+    color: "#ffffff"
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -70,7 +90,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-    - assets/
+    - assets/icons/
+    - assets/lottie/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,43 +1,28 @@
 import 'package:amazno_clone/common/widgets/loader.dart';
-import 'package:amazno_clone/features/home/service/home_services.dart';
+import 'package:amazno_clone/constants/global_variables.dart';
+import 'package:amazno_clone/constants/method_constants.dart';
 import 'package:amazno_clone/features/product_details/screen/product_detail_screen.dart';
-import 'package:amazno_clone/models/product.dart';
+import 'package:amazno_clone/providers/home_screen_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class DealOfTheDay extends StatefulWidget {
+class DealOfTheDay extends StatelessWidget {
   const DealOfTheDay({super.key});
 
   @override
-  State<DealOfTheDay> createState() => _DealOfTheDayState();
-}
-
-class _DealOfTheDayState extends State<DealOfTheDay> {
-  Product? product;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    fetchDealOfDay();
-  }
-
-  void fetchDealOfDay() async {
-    product = await HomeService().fetchDealOfDay(context: context);
-    setState(() {});
-  }
-
-  void navigateToDetailScreen() {
-    Navigator.of(context)
-        .pushNamed(ProductDetailScreen.routeName, arguments: product);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return product == null
+    var homeProvider = Provider.of<HomeScreenProvider>(context);
+    homeProvider.fetchDealOfDay(context);
+
+    return homeProvider.dealOfTheDay == null
         ? const Loader()
-        : product!.name.isEmpty
-            ? SizedBox()
+        : homeProvider.dealOfTheDay!.name.isEmpty
+            ? const SizedBox()
             : GestureDetector(
-                onTap: navigateToDetailScreen,
+                onTap: () => Navigator.of(context).pushNamed(
+                    ProductDetailScreen.routeName,
+                    arguments: homeProvider.dealOfTheDay),
                 child: Column(
                   children: [
                     Container(
@@ -49,17 +34,19 @@ class _DealOfTheDayState extends State<DealOfTheDay> {
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
-                    Image.network(
-                      product!.images[0],
-                      height: 235,
-                      fit: BoxFit.fitHeight,
+                    CachedNetworkImage(
+                      imageUrl: homeProvider.dealOfTheDay!.images[0],
+                      placeholder: (context, url) => const Loader(),
+                      height: height * 0.3,
+                      fit: BoxFit.contain,
                     ),
                     Container(
                       padding: const EdgeInsets.only(left: 15, top: 10),
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "\$${product!.price}",
-                        style: TextStyle(fontSize: 18),
+                        MethodConstants.formatIndianCurrency(
+                            homeProvider.dealOfTheDay!.price.toString()),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ),
                     Container(
@@ -67,7 +54,7 @@ class _DealOfTheDayState extends State<DealOfTheDay> {
                       padding:
                           const EdgeInsets.only(left: 15, top: 5, right: 40),
                       child: Text(
-                        product!.name,
+                        homeProvider.dealOfTheDay!.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -76,13 +63,14 @@ class _DealOfTheDayState extends State<DealOfTheDay> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: product!.images
+                        children: homeProvider.dealOfTheDay!.images
                             .map(
-                              (e) => Image.network(
-                                e,
+                              (e) => CachedNetworkImage(
+                                imageUrl: e,
+                                placeholder: (context, url) => const Loader(),
                                 fit: BoxFit.fitWidth,
-                                width: 100,
-                                height: 100,
+                                width: width * 0.25,
+                                height: width * 0.25,
                               ),
                             )
                             .toList(),

@@ -25,10 +25,12 @@ class AuthService {
         name: name,
         password: password,
         email: email,
-        address: '',
         type: '',
+        address: null,
         cart: [],
         token: '',
+        searchHistory: [],
+        wishlist: [],
       );
 
       http.Response res = await http.post(
@@ -61,7 +63,10 @@ class AuthService {
     try {
       http.Response res = await http.post(
         Uri.parse("$uri/api/signin"),
-        body: jsonEncode({'email': email, 'password': password}),
+        body: jsonEncode({
+          'email': email,
+          'password': password
+        }),
         headers: <String, String>{
           "Content-Type": "application/json; charset=UTF-8"
         },
@@ -78,10 +83,7 @@ class AuthService {
             'x-auth-token',
             authToken,
           );
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            BottomBar.routeName,
-            (route) => false,
-          );
+          Navigator.of(context).pushReplacementNamed(BottomBar.routeName);
         },
       );
     } catch (e) {
@@ -89,30 +91,31 @@ class AuthService {
     }
   }
 
-  void getUserData(BuildContext context) async {
+  Future<String?> getUserData(BuildContext context) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
       if (token == null) {
         prefs.setString('x-auth-token', '');
       }
-      var tokenRes = await http.post(Uri.parse('$uri/tokenIsValid'),
-          headers: <String, String>{
-            "Content-Type": "application/json; charset=UTF-8",
-            'x-auth-token': token!
-          });
+      var tokenRes = await http.post(Uri.parse('$uri/tokenIsValid'), headers: <String, String>{
+        "Content-Type": "application/json; charset=UTF-8",
+        'x-auth-token': token!
+      });
 
       var response = jsonDecode(tokenRes.body);
+
       if (response == true) {
         // get the user data
-        http.Response userRes = await http.get(Uri.parse("$uri/"),
-            headers: <String, String>{
-              "Content-Type": "application/json; charset=UTF-8",
-              'x-auth-token': token
-            });
+        http.Response userRes = await http.get(Uri.parse("$uri/"), headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+          'x-auth-token': token
+        });
         var userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.setUser(userRes.body);
+        return userProvider.user.token;
       }
     } catch (e) {}
+    return null;
   }
 }

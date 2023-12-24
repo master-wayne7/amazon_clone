@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382330631143",
+    "project_id": "clone-bdda8",
+    "storage_bucket": "clone-bdda8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382330631143:android:bc9fa724fd55260d294342",
+        "android_client_info": {
+          "package_name": "com.example.amazon_clone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEJfVY3W2oxfBS47aWzBV2NkW1VKY6TS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

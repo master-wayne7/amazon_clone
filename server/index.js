@@ -9,9 +9,10 @@ const productRouter = require("./routes/products");
 const userRouter = require("./routes/user");
 
 // Initializations
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const app = express();
-const DB = "mongodb+srv://ronitrameja:amazonclone@cluster0.mfhykti.mongodb.net/?retryWrites=true&w=majority"
+const DB =
+  "mongodb+srv://ronitrameja:amazonclone@cluster0.mfhykti.mongodb.net/?retryWrites=true&w=majority";
 
 // middleware
 app.use(express.json());
@@ -23,13 +24,13 @@ app.use(userRouter);
 // Connections
 mongoose
   .connect(DB)
-  .then(()=>{
+  .then(() => {
     console.log("Connection Successful");
   })
-  .catch((e)=>{
+  .catch((e) => {
     console.log(e);
   });
 
-app.listen(PORT, "192.168.0.109", ()=>{
-    console.log(`Server running on port ${PORT}`);
+app.listen(PORT, "192.168.0.108", () => {
+  console.log(`Server running on port ${PORT}`);
 });

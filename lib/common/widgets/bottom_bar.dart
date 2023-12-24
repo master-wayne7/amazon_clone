@@ -2,44 +2,40 @@ import 'package:amazno_clone/constants/global_variables.dart';
 import 'package:amazno_clone/features/account/screens/account_screen.dart';
 import 'package:amazno_clone/features/cart/screen/cart_screen.dart';
 import 'package:amazno_clone/features/home/screens/home_screen.dart';
+import 'package:amazno_clone/providers/home_screen_provider.dart';
+import 'package:amazno_clone/providers/payment_provider.dart';
 import 'package:amazno_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:provider/provider.dart';
 
-class BottomBar extends StatefulWidget {
+class BottomBar extends StatelessWidget {
   static const String routeName = '/actual-home';
-  const BottomBar({super.key});
+  BottomBar({super.key});
 
-  @override
-  State<BottomBar> createState() => _BottomBarState();
-}
-
-class _BottomBarState extends State<BottomBar> {
-  int _page = 0;
-  double bottomBarWidth = 42;
-  double bottomBarBorderWidth = 5;
-
-  List<Widget> pages = [
+  final double bottomBarWidth = width * .1;
+  final double bottomBarBorderWidth = 5;
+  final List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
     const CartScreen(),
   ];
 
-  void updatePage(int page) {
-    setState(() {
-      _page = page;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final paymentProvider = context.watch<PaymentProvider>();
+    final homeProvider = context.watch<HomeScreenProvider>();
+    if (paymentProvider.apps == null) {
+      paymentProvider.getApps();
+    }
     final userCartLength = context.watch<UserProvider>().user.cart.length;
     return Scaffold(
-      body: pages[_page],
+      body: pages[homeProvider.page],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _page,
-        onTap: updatePage,
+        type: BottomNavigationBarType.fixed,
+        useLegacyColorScheme: false,
+        currentIndex: homeProvider.page,
+        onTap: homeProvider.updatePage,
         selectedItemColor: GlobalVariables.selectedNavBarColor,
         unselectedItemColor: GlobalVariables.unselectedNavBarColor,
         backgroundColor: GlobalVariables.backgroundColor,
@@ -52,9 +48,7 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 0
-                        ? GlobalVariables.selectedNavBarColor
-                        : GlobalVariables.backgroundColor,
+                    color: homeProvider.page == 0 ? GlobalVariables.selectedNavBarColor : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
                   ),
                 ),
@@ -70,9 +64,7 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 1
-                        ? GlobalVariables.selectedNavBarColor
-                        : GlobalVariables.backgroundColor,
+                    color: homeProvider.page == 1 ? GlobalVariables.selectedNavBarColor : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
                   ),
                 ),
@@ -88,9 +80,7 @@ class _BottomBarState extends State<BottomBar> {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: _page == 2
-                        ? GlobalVariables.selectedNavBarColor
-                        : GlobalVariables.backgroundColor,
+                    color: homeProvider.page == 2 ? GlobalVariables.selectedNavBarColor : GlobalVariables.backgroundColor,
                     width: bottomBarBorderWidth,
                   ),
                 ),

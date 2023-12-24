@@ -1,3 +1,4 @@
+import 'package:amazno_clone/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 
 class AccountButton extends StatelessWidget {
@@ -9,10 +10,10 @@ class AccountButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 10,
+        margin: EdgeInsets.symmetric(
+          horizontal: width * 0.02,
         ),
-        height: 40,
+        height: height * 0.06,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.white,
@@ -28,7 +29,7 @@ class AccountButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(50),
             ),
           ),
-          onPressed: () => onTap,
+          onPressed: onTap,
           child: Text(
             text,
             style: TextStyle(

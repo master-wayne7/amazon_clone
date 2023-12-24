@@ -3,11 +3,13 @@ import 'dart:io';
 import 'package:amazno_clone/common/widgets/custom_button.dart';
 import 'package:amazno_clone/common/widgets/custom_textfield.dart';
 import 'package:amazno_clone/constants/global_variables.dart';
+import 'package:amazno_clone/constants/method_constants.dart';
 import 'package:amazno_clone/constants/utils.dart';
 import 'package:amazno_clone/features/admin/services/admin_services.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = '/add-product';
@@ -22,6 +24,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quanitityController = TextEditingController();
+  final TextEditingController sellerNameController = TextEditingController();
+  final TextEditingController discountController = TextEditingController();
+  final TextEditingController featuresController = TextEditingController();
   final AdminServices services = AdminServices();
   final _addProductFormKey = GlobalKey<FormState>();
   String category = "Mobiles";
@@ -30,8 +35,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
     // TODO: implement dispose
     priceController.dispose();
     productNameController.dispose();
+    discountController.dispose();
     quanitityController.dispose();
     descriptionController.dispose();
+    sellerNameController.dispose();
+    featuresController.dispose();
     super.dispose();
   }
 
@@ -49,12 +57,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
     if (_addProductFormKey.currentState!.validate() && images.isNotEmpty) {
       services.sellProduct(
           context: context,
+          features: featuresController.text,
           name: productNameController.text,
           description: descriptionController.text,
-          price: double.parse(priceController.text),
+          price: double.parse(priceController.text.replaceAll(",", "")),
           quantity: int.parse(quanitityController.text),
+          discount: int.parse(discountController.text),
           category: category,
-          images: images);
+          images: images,
+          sellerName: sellerNameController.text);
     }
   }
 
@@ -151,6 +162,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   height: 30,
                 ),
                 CustomTextField(
+                  type: TextInputType.text,
                   textEditingController: productNameController,
                   hintText: "Product Name",
                 ),
@@ -158,6 +170,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   height: 10,
                 ),
                 CustomTextField(
+                  type: TextInputType.multiline,
                   textEditingController: descriptionController,
                   hintText: "Description",
                   maxLines: 7,
@@ -165,7 +178,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(
                   height: 10,
                 ),
+                if (category == "Mobiles" || category == "Appliances")
+                  Column(
+                    children: [
+                      CustomTextField(
+                        type: TextInputType.multiline,
+                        textEditingController: featuresController,
+                        hintText: "Features",
+                        maxLines: 20,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
                 CustomTextField(
+                  type: TextInputType.number,
+                  formatter: [
+                    ThousandsSeparatorInputFormatter(),
+                  ],
                   textEditingController: priceController,
                   hintText: "Price",
                 ),
@@ -173,8 +204,29 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   height: 10,
                 ),
                 CustomTextField(
+                  type: TextInputType.number,
                   textEditingController: quanitityController,
                   hintText: "Quantity",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomTextField(
+                  formatter: [
+                    LengthLimitingTextInputFormatter(2),
+                  ],
+                  type: TextInputType.number,
+                  textEditingController: discountController,
+                  hintText: "Discount Percentage",
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomTextField(
+                  type: TextInputType.name,
+                  autoFillHints: const [AutofillHints.name],
+                  textEditingController: sellerNameController,
+                  hintText: "Seller Name",
                 ),
                 const SizedBox(
                   height: 10,

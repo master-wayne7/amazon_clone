@@ -1,8 +1,11 @@
 import 'package:amazno_clone/constants/global_variables.dart';
+import 'package:amazno_clone/features/admin/screens/analytics_screen.dart';
+import 'package:amazno_clone/features/admin/screens/orders_screen.dart';
 import 'package:amazno_clone/features/admin/screens/posts_screen.dart';
 import 'package:flutter/material.dart';
 
 class AdminScreen extends StatefulWidget {
+  static const String routeName = "/admin";
   const AdminScreen({super.key});
 
   @override
@@ -16,12 +19,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   List<Widget> pages = [
     const PostsScreen(),
-    const Center(
-      child: Text("Analytics Page"),
-    ),
-    const Center(
-      child: Text("Cart Page"),
-    ),
+    const AnalyticsScreen(),
+    const OrdersScreen(),
   ];
 
   void updatePage(int page) {

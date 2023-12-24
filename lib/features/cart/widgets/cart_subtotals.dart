@@ -1,3 +1,4 @@
+import 'package:amazno_clone/constants/method_constants.dart';
 import 'package:amazno_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,10 +9,11 @@ class CartSubtotal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
-    int sum = 0;
+    double sum = 0;
     user.cart
         .map(
-          (e) => sum += e['quantity'] * e['product']['price'] as int,
+          (e) =>
+              sum += e['quantity'] * e['product']['discountedPrice'] as double,
         )
         .toList();
     return Container(
@@ -23,7 +25,7 @@ class CartSubtotal extends StatelessWidget {
             style: TextStyle(fontSize: 20),
           ),
           Text(
-            "\$$sum",
+            MethodConstants.formatIndianCurrency(sum.toString()),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
